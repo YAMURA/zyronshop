@@ -82,7 +82,7 @@
     <script>
         let currentUser = null, isMusicPlaying = false;
         document.addEventListener('DOMContentLoaded', () => {
-            const userData = localStorage.getItem('cluddy_current_user');
+            const userData = localStorage.getItem('zyron_current_user');
             if (!userData) { window.location.href = 'login.html'; return; }
             currentUser = JSON.parse(userData);
             document.getElementById('userName').textContent = currentUser.fullname || currentUser.username;
@@ -90,11 +90,11 @@
             document.getElementById('creatorForm').addEventListener('submit', submitApplication);
             loadMusic();
         });
-        function loadMusic() { const musicUrl = localStorage.getItem('cluddy_music_url'); if (musicUrl) { document.getElementById('musicSource').src = musicUrl; document.getElementById('bgMusic').load(); } }
-        function toggleMusic() { const music = document.getElementById('bgMusic'); const icon = document.getElementById('musicIcon'); const text = document.getElementById('musicText'); const musicUrl = localStorage.getItem('cluddy_music_url'); if (isMusicPlaying) { music.pause(); icon.className = 'bi bi-music-note'; text.textContent = 'Play Music'; icon.style.animation = 'none'; } else { if (musicUrl) { music.play().catch(e => console.log('Playback failed:', e)); icon.className = 'bi bi-music-note-beamed music-playing'; text.textContent = 'Playing...'; } } isMusicPlaying = !isMusicPlaying; }
-        function submitApplication(event) { event.preventDefault(); const application = { id: Date.now(), userId: currentUser.id, username: currentUser.username, name: document.getElementById('creatorName').value, telegram: document.getElementById('creatorTelegram').value, platform: document.getElementById('creatorPlatform').value, followers: document.getElementById('creatorFollowers').value, reason: document.getElementById('creatorReason').value, timestamp: new Date().toISOString(), status: 'pending' }; const applications = JSON.parse(localStorage.getItem('cluddy_creator_applications')) || []; applications.push(application); localStorage.setItem('cluddy_creator_applications', JSON.stringify(applications)); showNotification('Application submitted! We will contact you on Telegram.', 'success'); document.getElementById('creatorForm').reset(); }
+        function loadMusic() { const musicUrl = localStorage.getItem('zyron_music_url'); if (musicUrl) { document.getElementById('musicSource').src = musicUrl; document.getElementById('bgMusic').load(); } }
+        function toggleMusic() { const music = document.getElementById('bgMusic'); const icon = document.getElementById('musicIcon'); const text = document.getElementById('musicText'); const musicUrl = localStorage.getItem('zyron_music_url'); if (isMusicPlaying) { music.pause(); icon.className = 'bi bi-music-note'; text.textContent = 'Play Music'; icon.style.animation = 'none'; } else { if (musicUrl) { music.play().catch(e => console.log('Playback failed:', e)); icon.className = 'bi bi-music-note-beamed music-playing'; text.textContent = 'Playing...'; } } isMusicPlaying = !isMusicPlaying; }
+        function submitApplication(event) { event.preventDefault(); const application = { id: Date.now(), userId: currentUser.id, username: currentUser.username, name: document.getElementById('creatorName').value, telegram: document.getElementById('creatorTelegram').value, platform: document.getElementById('creatorPlatform').value, followers: document.getElementById('creatorFollowers').value, reason: document.getElementById('creatorReason').value, timestamp: new Date().toISOString(), status: 'pending' }; const applications = JSON.parse(localStorage.getItem('zyron_creator_applications')) || []; applications.push(application); localStorage.setItem('zyron_creator_applications', JSON.stringify(applications)); showNotification('Application submitted! We will contact you on Telegram.', 'success'); document.getElementById('creatorForm').reset(); }
         function showNotification(msg, type) { const notification = document.createElement('div'); notification.className = `notification ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`; notification.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : 'x-circle'} mr-2"></i>${msg}`; document.body.appendChild(notification); setTimeout(() => notification.remove(), 3000); }
-        function logout() { localStorage.removeItem('cluddy_current_user'); window.location.href = 'login.html'; }
+        function logout() { localStorage.removeItem('zyron_current_user'); window.location.href = 'login.html'; }
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('active'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('active'); }
     </script>
