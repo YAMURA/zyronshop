@@ -536,7 +536,7 @@
         let selectedTier = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            const userData = localStorage.getItem('cluddy_current_user');
+            const userData = localStorage.getItem('zyron_current_user');
             if (!userData) {
                 window.location.href = 'login.html';
                 return;
@@ -550,7 +550,7 @@
         });
 
         function loadMusic() {
-            const musicUrl = localStorage.getItem('cluddy_music_url');
+            const musicUrl = localStorage.getItem('zyron_music_url');
             if (musicUrl) {
                 document.getElementById('musicSource').src = musicUrl;
                 document.getElementById('bgMusic').load();
@@ -561,7 +561,7 @@
             const music = document.getElementById('bgMusic');
             const icon = document.getElementById('musicIcon');
             const text = document.getElementById('musicText');
-            const musicUrl = localStorage.getItem('cluddy_music_url');
+            const musicUrl = localStorage.getItem('zyron_music_url');
             
             if (isMusicPlaying) {
                 music.pause();
@@ -609,9 +609,9 @@
                 status: 'pending'
             };
             
-            const applications = JSON.parse(localStorage.getItem('cluddy_reseller_applications')) || [];
+            const applications = JSON.parse(localStorage.getItem('zyron_reseller_applications')) || [];
             applications.push(application);
-            localStorage.setItem('cluddy_reseller_applications', JSON.stringify(applications));
+            localStorage.setItem('zyron_reseller_applications', JSON.stringify(applications));
             
             // Send to Telegram
             sendTelegramNotification(`📝 NEW RESELLER APPLICATION\nName: ${application.name}\nTelegram: ${application.telegram}\nBusiness: ${application.businessName}\nTier: ${application.tier}\nTime: ${new Date(application.timestamp).toLocaleString()}`);
@@ -643,7 +643,7 @@
         }
 
         function logout() {
-            localStorage.removeItem('cluddy_current_user');
+            localStorage.removeItem('zyron_current_user');
             window.location.href = 'login.html';
         }
 
