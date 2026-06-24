@@ -51,7 +51,7 @@
     <script>
         let currentUser = null, allOrders = [], isMusicPlaying = false;
         document.addEventListener('DOMContentLoaded', () => {
-            const userData = localStorage.getItem('cluddy_current_user');
+            const userData = localStorage.getItem('zyron_current_user');
             if (!userData) { window.location.href = 'login.html'; return; }
             currentUser = JSON.parse(userData);
             document.getElementById('userName').textContent = currentUser.fullname || currentUser.username;
@@ -59,13 +59,13 @@
             loadOrders();
             loadMusic();
         });
-        function loadMusic() { const musicUrl = localStorage.getItem('cluddy_music_url'); if (musicUrl) { document.getElementById('musicSource').src = musicUrl; document.getElementById('bgMusic').load(); } }
-        function toggleMusic() { const music = document.getElementById('bgMusic'); const icon = document.getElementById('musicIcon'); const text = document.getElementById('musicText'); const musicUrl = localStorage.getItem('cluddy_music_url'); if (isMusicPlaying) { music.pause(); icon.className = 'bi bi-music-note'; text.textContent = 'Play Music'; icon.style.animation = 'none'; } else { if (musicUrl) { music.play().catch(e => console.log('Playback failed:', e)); icon.className = 'bi bi-music-note-beamed music-playing'; text.textContent = 'Playing...'; } } isMusicPlaying = !isMusicPlaying; }
-        function loadOrders() { const orders = JSON.parse(localStorage.getItem('cluddy_orders')) || []; allOrders = orders.filter(o => o.userId === currentUser.id).reverse(); displayOrders(allOrders); }
+        function loadMusic() { const musicUrl = localStorage.getItem('zyron_music_url'); if (musicUrl) { document.getElementById('musicSource').src = musicUrl; document.getElementById('bgMusic').load(); } }
+        function toggleMusic() { const music = document.getElementById('bgMusic'); const icon = document.getElementById('musicIcon'); const text = document.getElementById('musicText'); const musicUrl = localStorage.getItem('zyron_music_url'); if (isMusicPlaying) { music.pause(); icon.className = 'bi bi-music-note'; text.textContent = 'Play Music'; icon.style.animation = 'none'; } else { if (musicUrl) { music.play().catch(e => console.log('Playback failed:', e)); icon.className = 'bi bi-music-note-beamed music-playing'; text.textContent = 'Playing...'; } } isMusicPlaying = !isMusicPlaying; }
+        function loadOrders() { const orders = JSON.parse(localStorage.getItem('zyron_orders')) || []; allOrders = orders.filter(o => o.userId === currentUser.id).reverse(); displayOrders(allOrders); }
         function displayOrders(orders) { const container = document.getElementById('ordersList'); if (orders.length === 0) { container.innerHTML = '<p class="text-gray-400 text-center py-8">No orders found.</p>'; return; } container.innerHTML = orders.map(order => `<div class="p-4 rounded-xl bg-white/5"><div class="flex justify-between items-start mb-3"><div><p class="text-white font-semibold">${order.productName}</p><p class="text-gray-400 text-sm">Order #${order.orderId}</p></div><span class="status-badge status-${order.status}">${order.status.toUpperCase()}</span></div><div class="flex justify-between items-center"><div><p class="text-purple-400">₱${order.amount}</p><p class="text-gray-500 text-xs">${order.paymentMethod?.toUpperCase() || 'N/A'}</p>${order.promoCode ? `<p class="text-gray-500 text-xs">Promo: ${order.promoCode}</p>` : ''}</div><div class="text-right"><p class="text-gray-500 text-xs">${new Date(order.timestamp).toLocaleString()}</p>${order.status === 'approved' ? `<button onclick="showNotification('Go to My Keys page to view your key', 'info')" class="mt-2 text-purple-400 text-xs hover:text-purple-300">View Key</button>` : ''}</div></div></div>`).join(''); }
         function filterOrders(status) { document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active')); event.target.classList.add('active'); const filtered = status === 'all' ? allOrders : allOrders.filter(o => o.status === status); displayOrders(filtered); }
         function showNotification(msg, type) { const notification = document.createElement('div'); notification.className = `fixed top-4 right-4 px-4 py-3 rounded-xl shadow-lg z-50 transition-all ${type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'} text-white`; notification.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : 'info-circle'} mr-2"></i>${msg}`; document.body.appendChild(notification); setTimeout(() => notification.remove(), 3000); }
-        function logout() { localStorage.removeItem('cluddy_current_user'); window.location.href = 'login.html'; }
+        function logout() { localStorage.removeItem('zyron_current_user'); window.location.href = 'login.html'; }
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('active'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('active'); }
     </script>
