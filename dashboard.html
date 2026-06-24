@@ -327,7 +327,7 @@
         });
 
         function loadUser() {
-            const userData = localStorage.getItem('cluddy_current_user');
+            const userData = localStorage.getItem('zyron_current_user');
             if (!userData) {
                 window.location.href = 'login.html';
                 return;
@@ -339,7 +339,7 @@
         }
 
         function updateDashboard() {
-            const orders = JSON.parse(localStorage.getItem('cluddy_orders')) || [];
+            const orders = JSON.parse(localStorage.getItem('zyron_orders')) || [];
             const userOrders = orders.filter(o => o.userId === currentUser.id);
             
             document.getElementById('totalOrders').textContent = userOrders.length;
@@ -367,7 +367,7 @@
         }
 
         function loadMusic() {
-            const musicUrl = localStorage.getItem('cluddy_music_url');
+            const musicUrl = localStorage.getItem('zyron_music_url');
             if (musicUrl) {
                 document.getElementById('musicSource').src = musicUrl;
                 document.getElementById('bgMusic').load();
@@ -378,7 +378,7 @@
             const music = document.getElementById('bgMusic');
             const icon = document.getElementById('musicIcon');
             const text = document.getElementById('musicText');
-            const musicUrl = localStorage.getItem('cluddy_music_url');
+            const musicUrl = localStorage.getItem('zyron_music_url');
             
             if (isMusicPlaying) {
                 music.pause();
@@ -396,7 +396,7 @@
         }
 
         function logout() {
-            localStorage.removeItem('cluddy_current_user');
+            localStorage.removeItem('zyron_current_user');
             window.location.href = 'login.html';
         }
 
