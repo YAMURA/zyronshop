@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
+    <title>Cluddy Shop | Premium Game Accounts & Mods</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: radial-gradient(circle at 20% 15%, rgba(147,51,234,0.15), rgba(0,0,0,0) 42%),
+                        radial-gradient(circle at 85% 70%, rgba(59,130,246,0.12), rgba(0,0,0,0) 45%),
+                        linear-gradient(135deg, #07070a 0%, #0b0b12 45%, #07070a 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        .glass-nav {
+            background: rgba(10,14,28,0.85);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(147,51,234,0.2);
+        }
+        
+        .glass-card {
+            background: rgba(10,14,28,0.6);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(147,51,234,0.16);
+            border-radius: 28px;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(147,51,234,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #9333ea, #3b82f6);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: 0 10px 30px rgba(147,51,234,0.3);
+        }
+        
+        .btn-primary:active { transform: translateY(0px); }
+        
+        .btn-outline {
+            border: 1px solid rgba(147,51,234,0.5);
+            background: transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-outline:hover {
+            background: rgba(147,51,234,0.1);
+            border-color: rgba(147,51,234,0.8);
+            transform: translateY(-2px);
+        }
+        
+        .hero-section { position: relative; overflow: hidden; }
+        
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background: radial-gradient(900px 420px at 12% 15%, rgba(147,51,234,0.25), transparent 55%),
+                        radial-gradient(700px 380px at 85% 30%, rgba(59,130,246,0.2), transparent 58%);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .product-card {
+            background: rgba(10,14,28,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(147,51,234,0.12);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card:hover {
+            border-color: rgba(147,51,234,0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .category-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .category-btn:hover {
+            background: rgba(147,51,234,0.1);
+            border-color: rgba(147,51,234,0.4);
+            transform: translateY(-2px);
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(147,51,234,0.2), rgba(59,130,246,0.2));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover .feature-icon { transform: scale(1.1) rotate(5deg); }
+        
+        .announcement-bar {
+            background: linear-gradient(90deg, #9333ea, #3b82f6);
+            animation: slideDown 0.5s ease;
+        }
+        
+        @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-up { animation: fadeInUp 0.6s ease-out; }
+        
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a 0%, #121212 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        
+        .splash-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #9333ea, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 1.6s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 45px rgba(147,51,234,0.35); }
+            50% { transform: scale(1.1); box-shadow: 0 0 65px rgba(147,51,234,0.55); }
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #9333ea, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        @media (max-width: 768px) {
+            .stat-number { font-size: 1.5rem; }
+            .hero-title { font-size: 2rem; }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+        }
+        
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            z-index: 10;
+        }
+        .status-active { background: rgba(16,185,129,0.9); color: white; }
+        .status-maintenance { background: rgba(245,158,11,0.9); color: white; }
+        
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 8px 12px;
+            border-radius: 40px;
+            border: 1px solid rgba(147,51,234,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .music-player:hover { transform: scale(1.05); border-color: rgba(147,51,234,0.6); }
+        @keyframes musicPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        .music-playing { animation: musicPulse 1s ease-in-out infinite; }
+        
+        .chat-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #9333ea, #3b82f6);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .chat-fab:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(147,51,234,0.4); }
+        .chat-fab:active { transform: scale(0.95); }
+        
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        .float-animation { animation: float 3s ease-in-out infinite; }
+        
+        .nav-links a {
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #c084fc;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Music Player -->
+    <div class="music-player" id="musicPlayer" onclick="toggleMusic()">
+        <i id="musicIcon" class="bi bi-music-note"></i>
+        <span id="musicText">Play Music</span>
+    </div>
+    <audio id="bgMusic" loop><source id="musicSource" src="" type="audio/mpeg"></audio>
+
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="text-center">
+            <div class="splash-logo mx-auto"><i class="bi bi-shop text-white text-4xl"></i></div>
+            <div class="text-white mt-4 text-sm font-semibold tracking-wider">CLUDDY SHOP</div>
+            <div class="mt-3 w-32 h-1 bg-white/10 rounded-full overflow-hidden mx-auto">
+                <div class="h-full w-1/2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full animate-pulse"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar text-white py-2 px-4 text-center text-sm" id="announcementBar">
+        <i class="bi bi-megaphone-fill mr-2"></i>
+        <span id="announcementText">🎉 Welcome to Cluddy Shop! Get 10% off on your first purchase!</span>
+    </div>
+
+    <!-- Navigation -->
+    <div class="glass-nav sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center flex-wrap gap-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center float-animation">
+                        <i class="bi bi-shop text-white text-sm"></i>
+                    </div>
+                    <span class="text-white font-bold text-xl">Cluddy Shop</span>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-4 nav-links">
+                    <a href="#" onclick="scrollToSection('home')" class="text-gray-300 hover:text-white transition">Home</a>
+                    <a href="#" onclick="scrollToSection('products')" class="text-gray-300 hover:text-white transition">Products</a>
+                    <a href="#" onclick="scrollToSection('categories')" class="text-gray-300 hover:text-white transition">Categories</a>
+                    <a href="#" onclick="scrollToSection('benefits')" class="text-gray-300 hover:text-white transition">Benefits</a>
+                    <a href="promos.html" class="text-gray-300 hover:text-white transition">Promos</a>
+                    <a href="creator-program.html" class="text-gray-300 hover:text-white transition">Creator Program</a>
+                    <a href="reseller-program.html" class="text-gray-300 hover:text-white transition">Reseller</a>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <a href="login.html" class="px-4 py-2 rounded-xl text-white border border-white/20 hover:bg-white/10 transition">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </a>
+                    <a href="register.html" class="px-4 py-2 rounded-xl btn-primary text-white">
+                        <i class="bi bi-person-plus"></i> Sign Up
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <div class="md:hidden fixed bottom-20 right-4 z-50">
+        <button onclick="toggleMobileMenu()" class="bg-purple-500/80 backdrop-blur-lg p-3 rounded-full">
+            <i class="bi bi-list text-white text-xl"></i>
+        </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 hidden" onclick="toggleMobileMenu()">
+        <div class="flex flex-col items-center justify-center h-full gap-4">
+            <a href="#" onclick="scrollToSection('home'); toggleMobileMenu()" class="text-white text-xl hover:text-purple-400">Home</a>
+            <a href="#" onclick="scrollToSection('products'); toggleMobileMenu()" class="text-white text-xl hover:text-purple-400">Products</a>
+            <a href="#" onclick="scrollToSection('categories'); toggleMobileMenu()" class="text-white text-xl hover:text-purple-400">Categories</a>
+            <a href="promos.html" onclick="toggleMobileMenu()" class="text-white text-xl hover:text-purple-400">Promos</a>
+            <a href="creator-program.html" onclick="toggleMobileMenu()" class="text-white text-xl hover:text-purple-400">Creator Program</a>
+            <a href="reseller-program.html" onclick="toggleMobileMenu()" class="text-white text-xl hover:text-purple-400">Reseller Program</a>
+            <a href="login.html" onclick="toggleMobileMenu()" class="text-white text-xl hover:text-purple-400">Login</a>
+            <a href="register.html" onclick="toggleMobileMenu()" class="text-white text-xl hover:text-purple-400">Register</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section relative">
+            <div class="container mx-auto px-4 py-16 md:py-24">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="fade-in-up">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-sm mb-6">
+                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                            Trusted by 10,000+ Gamers
+                        </div>
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+                            Premium Game <span class="bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">Accounts</span> & Mods
+                        </h1>
+                        <p class="text-gray-400 text-lg mb-8">
+                            Get the best gaming experience with our premium accounts, mods, and injectors for MLBB, CODM, NetEase and more.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="register.html" class="px-6 py-3 rounded-xl btn-primary text-white font-semibold">
+                                Get Started <i class="bi bi-arrow-right ml-2"></i>
+                            </a>
+                            <a href="#" onclick="scrollToSection('products')" class="px-6 py-3 rounded-xl btn-outline text-white font-semibold">
+                                Browse Products
+                            </a>
+                        </div>
+                        <div class="flex gap-8 mt-8">
+                            <div><div class="stat-number">10K+</div><div class="text-gray-500 text-sm">Happy Customers</div></div>
+                            <div><div class="stat-number">500+</div><div class="text-gray-500 text-sm">Products Sold</div></div>
+                            <div><div class="stat-number">24/7</div><div class="text-gray-500 text-sm">Support</div></div>
+                        </div>
+                    </div>
+                    <div class="fade-in-up" style="animation-delay: 0.2s;">
+                        <div class="glass-card p-4">
+                            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600" alt="Gaming" class="rounded-2xl w-full">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features/Benefits Section -->
+        <section id="benefits" class="py-16 bg-white/5">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">Why Choose Cluddy Shop?</h2>
+                    <p class="text-gray-400">We provide the best gaming experience with premium quality products</p>
+                </div>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 text-center">
+                        <div class="feature-icon mx-auto"><i class="bi bi-shield-check text-2xl text-purple-400"></i></div>
+                        <h3 class="text-xl font-semibold text-white mb-2">100% Secure</h3>
+                        <p class="text-gray-400">Safe transactions with secure payment methods</p>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <div class="feature-icon mx-auto"><i class="bi bi-lightning-charge text-2xl text-purple-400"></i></div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Instant Delivery</h3>
+                        <p class="text-gray-400">Get your products instantly after payment</p>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <div class="feature-icon mx-auto"><i class="bi bi-headset text-2xl text-purple-400"></i></div>
+                        <h3 class="text-xl font-semibold text-white mb-2">24/7 Support</h3>
+                        <p class="text-gray-400">Our support team is always ready to help</p>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <div class="feature-icon mx-auto"><i class="bi bi-people text-2xl text-purple-400"></i></div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Creator Program</h3>
+                        <p class="text-gray-400">Earn rewards by creating content</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section id="categories" class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">Available Games</h2>
+                    <p class="text-gray-400">Choose from our wide selection of games and mods</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="categoriesGrid">
+                    <div class="glass-card p-6 text-center category-btn" onclick="window.location.href='products.html'">
+                        <i class="bi bi-robot text-4xl text-purple-400 mb-3 block"></i>
+                        <h3 class="text-white font-semibold">Mobile Legends</h3>
+                        <p class="text-gray-500 text-sm">Accounts & Skins</p>
+                    </div>
+                    <div class="glass-card p-6 text-center category-btn" onclick="window.location.href='products.html'">
+                        <i class="bi bi-controller text-4xl text-purple-400 mb-3 block"></i>
+                        <h3 class="text-white font-semibold">Call of Duty Mobile</h3>
+                        <p class="text-gray-500 text-sm">Mods & Injectors</p>
+                    </div>
+                    <div class="glass-card p-6 text-center category-btn" onclick="window.location.href='products.html'">
+                        <i class="bi bi-cloud text-4xl text-purple-400 mb-3 block"></i>
+                        <h3 class="text-white font-semibold">NetEase Games</h3>
+                        <p class="text-gray-500 text-sm">Premium Accounts</p>
+                    </div>
+                    <div class="glass-card p-6 text-center category-btn" onclick="window.location.href='products.html'">
+                        <i class="bi bi-magic text-4xl text-purple-400 mb-3 block"></i>
+                        <h3 class="text-white font-semibold">Mods & Injectors</h3>
+                        <p class="text-gray-500 text-sm">Undetected Mods</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="py-16 bg-white/5">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">Featured Products</h2>
+                    <p class="text-gray-400">Check out our most popular products</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="productsGrid">
+                    <div class="text-center text-gray-400 col-span-full py-8">Loading products...</div>
+                </div>
+                <div class="text-center mt-10">
+                    <a href="products.html" class="px-8 py-3 rounded-xl btn-primary text-white font-semibold inline-flex items-center gap-2">
+                        View All Products <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Program Cards Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Creator Program Card -->
+                    <div class="glass-card p-8 text-center hover:border-purple-500/30 transition-all cursor-pointer" onclick="window.location.href='creator-program.html'">
+                        <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <i class="bi bi-camera-reels text-white text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">Creator Program</h3>
+                        <p class="text-gray-400 mb-4">Join our creator program and earn free keys, exclusive discounts, and more!</p>
+                        <div class="flex flex-wrap gap-2 justify-center">
+                            <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs">Free Keys</span>
+                            <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs">40% Discount</span>
+                            <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs">VIP Access</span>
+                        </div>
+                        <button class="mt-4 px-6 py-2 rounded-xl btn-primary text-white">Learn More</button>
+                    </div>
+                    
+                    <!-- Reseller Program Card -->
+                    <div class="glass-card p-8 text-center hover:border-purple-500/30 transition-all cursor-pointer" onclick="window.location.href='reseller-program.html'">
+                        <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <i class="bi bi-people text-white text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">Reseller Program</h3>
+                        <p class="text-gray-400 mb-4">Become an authorized reseller and earn up to 30% commission!</p>
+                        <div class="flex flex-wrap gap-2 justify-center">
+                            <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">30% Commission</span>
+                            <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">Wholesale Price</span>
+                            <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">Priority Support</span>
+                        </div>
+                        <button class="mt-4 px-6 py-2 rounded-xl btn-primary text-white">Learn More</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Official Channels -->
+        <section class="py-16 bg-white/5">
+            <div class="container mx-auto px-4">
+                <div class="glass-card p-8 text-center">
+                    <h3 class="text-2xl font-bold text-white mb-4">Official Channels</h3>
+                    <p class="text-gray-400 mb-6">Follow us on our official channels for updates and announcements</p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <a href="https://t.me/xyhiaofcchannel" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/30 transition">
+                            <i class="bi bi-telegram text-xl"></i> <span>Main Channel</span>
+                        </a>
+                        <a href="https://t.me/codmstocksnisato" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-500/20 border border-green-500/30 text-green-400 hover:bg-green-500/30 transition">
+                            <i class="bi bi-shield-check text-xl"></i> <span>Proof Channel</span>
+                        </a>
+                        <a href="https://t.me/xmoddercluddy" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/30 transition">
+                            <i class="bi bi-chat-dots text-xl"></i> <span>Feedback Channel</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Methods -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="glass-card p-8 text-center">
+                    <h3 class="text-2xl font-bold text-white mb-4">Secure Payment Methods</h3>
+                    <p class="text-gray-400 mb-6">We accept multiple payment methods for your convenience</p>
+                    <div class="flex flex-wrap justify-center gap-6">
+                        <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-500/10 border border-green-500/20">
+                            <i class="bi bi-phone text-green-400 text-xl"></i>
+                            <span class="text-white">GCash</span>
+                            <span class="text-gray-400 text-xs">09167314020 (M** J** E**)</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+                            <i class="bi bi-currency-bitcoin text-yellow-400 text-xl"></i>
+                            <span class="text-white">Binance</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-4">
+                <div class="glass-card p-8 md:p-12 text-center bg-gradient-to-r from-purple-500/10 to-blue-500/10">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Level Up?</h2>
+                    <p class="text-gray-300 mb-6 max-w-2xl mx-auto">Join thousands of gamers who trust Cluddy Shop for their gaming needs.</p>
+                    <div class="flex flex-wrap gap-4 justify-center">
+                        <a href="register.html" class="px-6 py-3 rounded-xl btn-primary text-white font-semibold">Create Account Now</a>
+                        <a href="login.html" class="px-6 py-3 rounded-xl btn-outline text-white font-semibold">Login to Your Account</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-white/10 py-8">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center float-animation">
+                            <i class="bi bi-shop text-white text-sm"></i>
+                        </div>
+                        <span class="text-white font-bold">Cluddy Shop</span>
+                    </div>
+                    <div class="flex gap-6">
+                        <a href="creator-program.html" class="text-gray-400 hover:text-white text-sm">Creator Program</a>
+                        <a href="reseller-program.html" class="text-gray-400 hover:text-white text-sm">Reseller Program</a>
+                        <a href="promos.html" class="text-gray-400 hover:text-white text-sm">Promos</a>
+                        <a href="chat.html" class="text-gray-400 hover:text-white text-sm">Support</a>
+                    </div>
+                    <div class="text-gray-500 text-sm">© 2026 Cluddy Shop. All rights reserved.</div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Chat Button -->
+    <button class="chat-fab" onclick="window.location.href='chat.html'">
+        <i class="bi bi-chat-dots"></i>
+    </button>
+
+    <script>
+        let isMusicPlaying = false;
+        let musicFile = localStorage.getItem('cluddy_music_url');
+        
+        function loadMusic() {
+            if (musicFile) {
+                document.getElementById('musicSource').src = musicFile;
+                document.getElementById('bgMusic').load();
+            }
+        }
+        
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const icon = document.getElementById('musicIcon');
+            const text = document.getElementById('musicText');
+            
+            if (isMusicPlaying) {
+                music.pause();
+                icon.className = 'bi bi-music-note';
+                text.textContent = 'Play Music';
+                icon.style.animation = 'none';
+            } else {
+                if (musicFile) {
+                    music.play().catch(e => console.log('Playback failed:', e));
+                    icon.className = 'bi bi-music-note-beamed music-playing';
+                    text.textContent = 'Playing...';
+                }
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        window.addEventListener('load', function() {
+            loadMusic();
+            setTimeout(function() {
+                const splash = document.getElementById('splashScreen');
+                splash.style.opacity = '0';
+                setTimeout(function() { splash.style.display = 'none'; }, 500);
+            }, 1500);
+        });
+
+        function loadProducts() {
+            let products = JSON.parse(localStorage.getItem('cluddy_products'));
+            const grid = document.getElementById('productsGrid');
+            
+            if (!products || products.length === 0) {
+                grid.innerHTML = '<div class="text-center text-gray-400 col-span-full py-8">No products available. Admin needs to add products first.</div>';
+                return;
+            }
+            displayProducts(products.slice(0, 4));
+        }
+
+        function displayProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = products.map(product => {
+                const finalPrice = product.price * (1 - (product.discount || 0) / 100);
+                const statusClass = product.status === 'maintenance' ? 'status-maintenance' : 'status-active';
+                const statusText = product.status === 'maintenance' ? 'Maintenance' : 'Active';
+                return `
+                    <div class="product-card p-4" onclick="viewProduct(${product.id})">
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-40 object-cover rounded-xl mb-3">
+                        <h3 class="text-white font-semibold mb-1">${product.name}</h3>
+                        <div class="flex justify-between items-center">
+                            <span class="text-purple-400 font-bold">₱${finalPrice.toFixed(2)}</span>
+                            ${product.discount > 0 ? `<span class="text-gray-400 text-sm line-through">₱${product.price}</span>` : ''}
+                        </div>
+                        <p class="text-gray-500 text-xs mt-2">${product.description.substring(0, 50)}...</p>
+                        <div class="mt-3 flex justify-between items-center">
+                            <span class="text-green-400 text-xs">${product.stock > 0 ? 'In Stock' : 'Out of Stock'}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function viewProduct(productId) {
+            showNotification('Please login to purchase products', 'info');
+            setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) { element.scrollIntoView({ behavior: 'smooth' }); }
+        }
+
+        function showNotification(msg, type) {
+            const existing = document.querySelectorAll('.notification');
+            existing.forEach(n => n.remove());
+            const notification = document.createElement('div');
+            notification.className = `notification ${type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'} text-white`;
+            notification.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : 'info-circle'} mr-2"></i>${msg}`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function loadAnnouncements() {
+            const announcements = JSON.parse(localStorage.getItem('cluddy_announcements')) || [];
+            const announcementText = document.getElementById('announcementText');
+            if (announcements.length > 0) {
+                let index = 0;
+                setInterval(() => {
+                    announcementText.style.opacity = '0';
+                    setTimeout(() => {
+                        announcementText.textContent = announcements[index].message;
+                        announcementText.style.opacity = '1';
+                    }, 300);
+                    index = (index + 1) % announcements.length;
+                }, 5000);
+            }
+        }
+
+        loadProducts();
+        loadAnnouncements();
+    </script>
+</body>
+</html>

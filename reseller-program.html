@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cluddy Shop | Reseller Program</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            background: radial-gradient(circle at 20% 15%, rgba(147,51,234,0.15), rgba(0,0,0,0) 42%),
+                        linear-gradient(135deg, #07070a 0%, #0b0b12 45%, #07070a 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(10,14,28,0.6);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(147,51,234,0.16);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(147,51,234,0.3);
+            transform: translateY(-2px);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #9333ea, #3b82f6);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: 0 10px 30px rgba(147,51,234,0.3);
+        }
+        .btn-primary:active {
+            transform: translateY(0px);
+        }
+        .input-field {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #9333ea;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(147,51,234,0.2);
+        }
+        .pricing-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .pricing-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(147,51,234,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .pricing-popular {
+            border: 2px solid #f59e0b;
+            position: relative;
+            transform: scale(1.02);
+        }
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 10px rgba(245,158,11,0.3);
+        }
+        .benefit-item {
+            transition: all 0.3s ease;
+        }
+        .benefit-item:hover {
+            transform: translateX(8px);
+            background: rgba(147,51,234,0.1);
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: rgba(10,14,28,0.95);
+            backdrop-filter: blur(18px);
+            border-right: 1px solid rgba(147,51,234,0.2);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+        }
+        .overlay.active {
+            display: block;
+        }
+        @media (min-width: 1024px) {
+            .sidebar {
+                transform: translateX(0);
+            }
+            .menu-toggle {
+                display: none;
+            }
+            main {
+                margin-left: 280px;
+            }
+        }
+        @media (max-width: 1024px) {
+            main {
+                margin-left: 0;
+            }
+        }
+        .nav-item {
+            transition: all 0.3s ease;
+        }
+        .nav-item:hover {
+            background: rgba(147,51,234,0.1);
+            transform: translateX(5px);
+        }
+        .nav-item.active {
+            background: rgba(147,51,234,0.2);
+            color: #c084fc;
+        }
+        .glass-header {
+            background: rgba(10,14,28,0.85);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(147,51,234,0.2);
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 8px 12px;
+            border-radius: 40px;
+            border: 1px solid rgba(147,51,234,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .music-player:hover {
+            transform: scale(1.05);
+            border-color: rgba(147,51,234,0.6);
+        }
+        @keyframes musicPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        .music-playing {
+            animation: musicPulse 1s ease-in-out infinite;
+        }
+        
+        .chat-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #9333ea, #3b82f6);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .chat-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(147,51,234,0.4);
+        }
+        .chat-fab:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <!-- Music Player -->
+    <div class="music-player" id="musicPlayer" onclick="toggleMusic()">
+        <i id="musicIcon" class="bi bi-music-note"></i>
+        <span id="musicText">Play Music</span>
+    </div>
+    <audio id="bgMusic" loop>
+        <source id="musicSource" src="" type="audio/mpeg">
+    </audio>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="p-6">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+                    <i class="bi bi-shop text-white text-xl"></i>
+                </div>
+                <span class="text-white font-bold text-xl">Cluddy Shop</span>
+            </div>
+            <nav class="space-y-2">
+                <a href="dashboard.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="products.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition">
+                    <i class="bi bi-grid-3x3-gap-fill"></i> Products
+                </a>
+                <a href="deposit.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition">
+                    <i class="bi bi-wallet2"></i> Deposit
+                </a>
+                <a href="status.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition">
+                    <i class="bi bi-activity"></i> Status
+                </a>
+                <a href="mykeys.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition">
+                    <i class="bi bi-key"></i> My Keys
+                </a>
+                <a href="orders.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition">
+                    <i class="bi bi-receipt"></i> Orders
+                </a>
+                <a href="promos.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition">
+                    <i class="bi bi-fire"></i> Promos
+                </a>
+                <a href="creator-program.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition">
+                    <i class="bi bi-camera-reels"></i> Creator Program
+                </a>
+                <a href="reseller-program.html" class="nav-item active flex items-center gap-3 px-4 py-3 rounded-xl">
+                    <i class="bi bi-people"></i> Reseller Program
+                </a>
+                <hr class="border-white/10 my-4">
+                <a href="#" onclick="logout()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <!-- Main Content -->
+    <main class="p-4 md:p-6 transition-all">
+        <!-- Header -->
+        <div class="glass-header sticky top-0 z-50 rounded-2xl p-4 mb-6 flex justify-between items-center">
+            <button class="menu-toggle text-white text-2xl" onclick="toggleSidebar()">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                    <div class="text-white text-sm font-semibold" id="userName">Loading...</div>
+                    <div class="text-green-400 text-xs">Balance: ₱<span id="userBalance">0</span></div>
+                </div>
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                    <i class="bi bi-person text-white"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="glass-card p-6 mb-6">
+            <div class="flex justify-between items-center flex-wrap gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">🤝 Reseller Program</h1>
+                    <p class="text-gray-400">Become an authorized reseller and earn up to 30% commission</p>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-sm">
+                    <i class="bi bi-graph-up"></i> Earn Up to 30% Commission
+                </span>
+            </div>
+        </div>
+
+        <!-- Pricing Plans -->
+        <h2 class="text-xl font-bold text-white mb-4">📊 Reseller Tiers</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Starter Plan -->
+            <div class="glass-card p-6 pricing-card">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <i class="bi bi-star text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Starter Reseller</h3>
+                    <p class="text-3xl font-bold text-purple-400 mb-2">₱2,000</p>
+                    <p class="text-gray-400 text-sm mb-4">Initial deposit required</p>
+                </div>
+                <ul class="space-y-3 text-gray-400 text-sm mb-6">
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> 10% Discount on all products</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> Access to reseller panel</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> Basic support</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-x-circle text-gray-600"></i> Priority support</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-x-circle text-gray-600"></i> Monthly bonus rewards</li>
+                </ul>
+                <button onclick="selectTier('starter')" class="w-full btn-primary py-2 rounded-xl text-white font-semibold">Select Plan</button>
+            </div>
+
+            <!-- Pro Plan (Popular) -->
+            <div class="glass-card p-6 pricing-card pricing-popular">
+                <div class="popular-badge">MOST POPULAR</div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <i class="bi bi-trophy text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Pro Reseller</h3>
+                    <p class="text-3xl font-bold text-orange-400 mb-2">₱5,000</p>
+                    <p class="text-gray-400 text-sm mb-4">Initial deposit required</p>
+                </div>
+                <ul class="space-y-3 text-gray-400 text-sm mb-6">
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> 20% Discount on all products</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> Access to reseller panel</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> Priority support</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> Monthly bonus rewards</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> Early access to new products</li>
+                </ul>
+                <button onclick="selectTier('pro')" class="w-full btn-primary py-2 rounded-xl text-white font-semibold">Select Plan</button>
+            </div>
+
+            <!-- Elite Plan -->
+            <div class="glass-card p-6 pricing-card">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <i class="bi bi-crown text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Elite Reseller</h3>
+                    <p class="text-3xl font-bold text-yellow-400 mb-2">₱10,000</p>
+                    <p class="text-gray-400 text-sm mb-4">Initial deposit required</p>
+                </div>
+                <ul class="space-y-3 text-gray-400 text-sm mb-6">
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> 30% Discount on all products</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> Access to reseller panel</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> 24/7 VIP support</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> Exclusive early access</li>
+                    <li class="flex items-center gap-2"><i class="bi bi-check-circle text-green-400"></i> Custom branding options</li>
+                </ul>
+                <button onclick="selectTier('elite')" class="w-full btn-primary py-2 rounded-xl text-white font-semibold">Select Plan</button>
+            </div>
+        </div>
+
+        <!-- Benefits and Requirements Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Benefits -->
+            <div class="glass-card p-6">
+                <h2 class="text-xl font-bold text-white mb-4">✨ Reseller Benefits</h2>
+                <div class="space-y-3">
+                    <div class="benefit-item flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <i class="bi bi-percent text-purple-400 text-xl"></i>
+                        <div>
+                            <p class="text-white font-semibold">Wholesale Pricing</p>
+                            <p class="text-gray-400 text-sm">Get products at discounted wholesale rates</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <i class="bi bi-box-seam text-purple-400 text-xl"></i>
+                        <div>
+                            <p class="text-white font-semibold">Bulk Orders</p>
+                            <p class="text-gray-400 text-sm">Place bulk orders with special pricing</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <i class="bi bi-headset text-purple-400 text-xl"></i>
+                        <div>
+                            <p class="text-white font-semibold">Priority Support</p>
+                            <p class="text-gray-400 text-sm">Dedicated support for resellers</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <i class="bi bi-graph-up text-purple-400 text-xl"></i>
+                        <div>
+                            <p class="text-white font-semibold">Growth Program</p>
+                            <p class="text-gray-400 text-sm">Earn higher tiers as you grow</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <i class="bi bi-cart-check text-purple-400 text-xl"></i>
+                        <div>
+                            <p class="text-white font-semibold">Inventory Management</p>
+                            <p class="text-gray-400 text-sm">Track your sales and inventory easily</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Requirements -->
+            <div class="glass-card p-6">
+                <h2 class="text-xl font-bold text-white mb-4">📋 Requirements</h2>
+                <div class="space-y-3">
+                    <div class="benefit-item flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <i class="bi bi-telegram text-purple-400 text-xl"></i>
+                        <div>
+                            <p class="text-white font-semibold">Active Telegram Account</p>
+                            <p class="text-gray-400 text-sm">Must have active Telegram for communication</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <i class="bi bi-shop text-purple-400 text-xl"></i>
+                        <div>
+                            <p class="text-white font-semibold">Active Store/Business</p>
+                            <p class="text-gray-400 text-sm">Must have an active online store or business</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <i class="bi bi-currency-dollar text-purple-400 text-xl"></i>
+                        <div>
+                            <p class="text-white font-semibold">Initial Deposit</p>
+                            <p class="text-gray-400 text-sm">Based on chosen tier (refundable upon exit)</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <i class="bi bi-calendar-check text-purple-400 text-xl"></i>
+                        <div>
+                            <p class="text-white font-semibold">Minimum Monthly Sales</p>
+                            <p class="text-gray-400 text-sm">₱500 for Starter, ₱1,000 for Pro, ₱2,000 for Elite</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                        <i class="bi bi-shield-check text-purple-400 text-xl"></i>
+                        <div>
+                            <p class="text-white font-semibold">Follow Guidelines</p>
+                            <p class="text-gray-400 text-sm">Must follow reseller guidelines and pricing policies</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Application Form -->
+        <div class="glass-card p-6 mb-8">
+            <h2 class="text-xl font-bold text-white mb-4">📝 Apply for Reseller Program</h2>
+            <p class="text-gray-400 mb-4">Fill out the form below. Our team will review your application and contact you on Telegram within 48 hours.</p>
+            
+            <form id="resellerForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2">Full Name</label>
+                        <input type="text" id="resellerName" required class="input-field w-full rounded-xl p-3 text-white" placeholder="Enter your full name">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2">Telegram Username</label>
+                        <input type="text" id="resellerTelegram" required placeholder="@username" class="input-field w-full rounded-xl p-3 text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2">Email Address</label>
+                        <input type="email" id="resellerEmail" required class="input-field w-full rounded-xl p-3 text-white" placeholder="your@email.com">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2">Business/Store Name</label>
+                        <input type="text" id="businessName" required class="input-field w-full rounded-xl p-3 text-white" placeholder="Your store name">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2">Preferred Tier</label>
+                        <select id="resellerTier" class="input-field w-full rounded-xl p-3 text-white">
+                            <option value="starter">Starter (₱2,000) - 10% discount</option>
+                            <option value="pro">Pro (₱5,000) - 20% discount</option>
+                            <option value="elite">Elite (₱10,000) - 30% discount</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2">Store/Channel Link</label>
+                        <input type="url" id="storeLink" required class="input-field w-full rounded-xl p-3 text-white" placeholder="https://...">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-300 text-sm mb-2">Why do you want to become a reseller?</label>
+                    <textarea id="resellerReason" rows="3" required class="input-field w-full rounded-xl p-3 text-white" placeholder="Tell us why you'd be a great reseller..."></textarea>
+                </div>
+                <div class="flex items-start gap-3">
+                    <input type="checkbox" id="agreeTerms" required class="mt-1">
+                    <label class="text-gray-400 text-sm">I agree to the <a href="#" class="text-purple-400 hover:text-purple-300">Reseller Terms and Conditions</a> and understand the requirements.</label>
+                </div>
+                <button type="submit" class="btn-primary w-full py-3 rounded-xl text-white font-semibold">
+                    <i class="bi bi-send mr-2"></i> Submit Application
+                </button>
+            </form>
+        </div>
+
+        <!-- Rules Section -->
+        <div class="glass-card p-6">
+            <h2 class="text-xl font-bold text-white mb-4">📜 Reseller Rules & Policies</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2 text-gray-400 text-sm">
+                    <p><i class="bi bi-dot text-purple-400"></i> Initial deposit based on chosen tier (refundable upon exit)</p>
+                    <p><i class="bi bi-dot text-purple-400"></i> Must maintain minimum monthly sales volume</p>
+                    <p><i class="bi bi-dot text-purple-400"></i> Follow reseller pricing guidelines (no undercutting)</p>
+                    <p><i class="bi bi-dot text-purple-400"></i> No selling on unauthorized platforms</p>
+                </div>
+                <div class="space-y-2 text-gray-400 text-sm">
+                    <p><i class="bi bi-dot text-purple-400"></i> Provide customer support for your sales</p>
+                    <p><i class="bi bi-dot text-purple-400"></i> No reselling to other resellers without permission</p>
+                    <p><i class="bi bi-dot text-purple-400"></i> Violation of rules = immediate termination</p>
+                    <p><i class="bi bi-dot text-purple-400"></i> Quarterly performance reviews</p>
+                </div>
+            </div>
+            <div class="mt-4 p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+                <p class="text-yellow-400 text-sm"><i class="bi bi-exclamation-triangle-fill mr-2"></i>Note: All resellers must maintain good standing with customers. Fraudulent activities will result in immediate termination and forfeiture of deposit.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Chat Button -->
+    <button class="chat-fab" onclick="window.location.href='chat.html'">
+        <i class="bi bi-chat-dots"></i>
+    </button>
+
+    <script>
+        let currentUser = null;
+        let isMusicPlaying = false;
+        let selectedTier = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userData = localStorage.getItem('cluddy_current_user');
+            if (!userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUser = JSON.parse(userData);
+            document.getElementById('userName').textContent = currentUser.fullname || currentUser.username;
+            document.getElementById('userBalance').textContent = currentUser.balance || 0;
+            
+            document.getElementById('resellerForm').addEventListener('submit', submitApplication);
+            loadMusic();
+        });
+
+        function loadMusic() {
+            const musicUrl = localStorage.getItem('cluddy_music_url');
+            if (musicUrl) {
+                document.getElementById('musicSource').src = musicUrl;
+                document.getElementById('bgMusic').load();
+            }
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const icon = document.getElementById('musicIcon');
+            const text = document.getElementById('musicText');
+            const musicUrl = localStorage.getItem('cluddy_music_url');
+            
+            if (isMusicPlaying) {
+                music.pause();
+                icon.className = 'bi bi-music-note';
+                text.textContent = 'Play Music';
+                icon.style.animation = 'none';
+            } else {
+                if (musicUrl) {
+                    music.play().catch(e => console.log('Playback failed:', e));
+                    icon.className = 'bi bi-music-note-beamed music-playing';
+                    text.textContent = 'Playing...';
+                }
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        function selectTier(tier) {
+            selectedTier = tier;
+            const select = document.getElementById('resellerTier');
+            if (tier === 'starter') select.value = 'starter';
+            else if (tier === 'pro') select.value = 'pro';
+            else if (tier === 'elite') select.value = 'elite';
+            
+            // Scroll to form
+            document.getElementById('resellerForm').scrollIntoView({ behavior: 'smooth' });
+            
+            showNotification(`${tier.charAt(0).toUpperCase() + tier.slice(1)} tier selected!`, 'success');
+        }
+
+        function submitApplication(event) {
+            event.preventDefault();
+            
+            const application = {
+                id: Date.now(),
+                userId: currentUser.id,
+                username: currentUser.username,
+                name: document.getElementById('resellerName').value,
+                telegram: document.getElementById('resellerTelegram').value,
+                email: document.getElementById('resellerEmail').value,
+                businessName: document.getElementById('businessName').value,
+                tier: document.getElementById('resellerTier').value,
+                storeLink: document.getElementById('storeLink').value,
+                reason: document.getElementById('resellerReason').value,
+                timestamp: new Date().toISOString(),
+                status: 'pending'
+            };
+            
+            const applications = JSON.parse(localStorage.getItem('cluddy_reseller_applications')) || [];
+            applications.push(application);
+            localStorage.setItem('cluddy_reseller_applications', JSON.stringify(applications));
+            
+            // Send to Telegram
+            sendTelegramNotification(`📝 NEW RESELLER APPLICATION\nName: ${application.name}\nTelegram: ${application.telegram}\nBusiness: ${application.businessName}\nTier: ${application.tier}\nTime: ${new Date(application.timestamp).toLocaleString()}`);
+            
+            showNotification('Application submitted! We will contact you on Telegram within 48 hours.', 'success');
+            document.getElementById('resellerForm').reset();
+        }
+
+        function sendTelegramNotification(message) {
+            const BOT_TOKEN = '8499837362:AAEFJQiF0wtkwtY7ZJHirPpdxEJ2z2tKvYo';
+            const ADMIN_ID = '5318214551';
+            
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: ADMIN_ID, text: message })
+            }).catch(console.error);
+        }
+
+        function showNotification(msg, type) {
+            const existing = document.querySelectorAll('.notification');
+            existing.forEach(n => n.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
+            notification.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : 'x-circle'} mr-2"></i>${msg}`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function logout() {
+            localStorage.removeItem('cluddy_current_user');
+            window.location.href = 'login.html';
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+        }
+    </script>
+</body>
+</html>

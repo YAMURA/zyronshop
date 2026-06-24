@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cluddy Shop | My Keys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background: radial-gradient(circle at 20% 15%, rgba(147,51,234,0.15), rgba(0,0,0,0) 42%), linear-gradient(135deg, #07070a 0%, #0b0b12 45%, #07070a 100%); min-height: 100vh; }
+        .glass-card { background: rgba(10,14,28,0.6); backdrop-filter: blur(14px); border: 1px solid rgba(147,51,234,0.16); border-radius: 24px; }
+        .btn-primary { background: linear-gradient(135deg, #9333ea, #3b82f6); transition: all 0.3s ease; cursor: pointer; }
+        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.05); }
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100%; background: rgba(10,14,28,0.95); backdrop-filter: blur(18px); border-right: 1px solid rgba(147,51,234,0.2); transform: translateX(-100%); transition: transform 0.3s ease; z-index: 100; }
+        .sidebar.open { transform: translateX(0); }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 99; }
+        .overlay.active { display: block; }
+        @media (min-width: 1024px) { .sidebar { transform: translateX(0); } .menu-toggle { display: none; } main { margin-left: 280px; } }
+        @media (max-width: 1024px) { main { margin-left: 0; } }
+        .nav-item { transition: all 0.3s ease; }
+        .nav-item:hover { background: rgba(147,51,234,0.1); transform: translateX(5px); }
+        .nav-item.active { background: rgba(147,51,234,0.2); color: #c084fc; }
+        .glass-header { background: rgba(10,14,28,0.85); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(147,51,234,0.2); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; }
+        .music-player { position: fixed; bottom: 20px; left: 20px; z-index: 1000; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 8px 12px; border-radius: 40px; border: 1px solid rgba(147,51,234,0.3); display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.3s ease; }
+        .music-player:hover { transform: scale(1.05); border-color: rgba(147,51,234,0.6); }
+        @keyframes musicPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+        .music-playing { animation: musicPulse 1s ease-in-out infinite; }
+    </style>
+</head>
+<body>
+    <div class="music-player" id="musicPlayer" onclick="toggleMusic()"><i id="musicIcon" class="bi bi-music-note"></i><span id="musicText">Play Music</span></div>
+    <audio id="bgMusic" loop><source id="musicSource" src="" type="audio/mpeg"></audio>
+
+    <div class="sidebar" id="sidebar"><div class="p-6"><div class="flex items-center gap-3 mb-8"><div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center"><i class="bi bi-shop text-white text-xl"></i></div><span class="text-white font-bold text-xl">Cluddy Shop</span></div><nav class="space-y-2"><a href="dashboard.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition"><i class="bi bi-speedometer2"></i> Dashboard</a><a href="products.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition"><i class="bi bi-grid-3x3-gap-fill"></i> Products</a><a href="deposit.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition"><i class="bi bi-wallet2"></i> Deposit</a><a href="status.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition"><i class="bi bi-activity"></i> Status</a><a href="mykeys.html" class="nav-item active flex items-center gap-3 px-4 py-3 rounded-xl"><i class="bi bi-key"></i> My Keys</a><a href="orders.html" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 transition"><i class="bi bi-receipt"></i> Orders</a><hr class="border-white/10 my-4"><a href="#" onclick="logout()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition"><i class="bi bi-box-arrow-right"></i> Logout</a></nav></div></div>
+    
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <main class="p-4 md:p-6 transition-all">
+        <div class="glass-header sticky top-0 z-50 rounded-2xl p-4 mb-6 flex justify-between items-center"><button class="menu-toggle text-white text-2xl" onclick="toggleSidebar()"><i class="bi bi-list"></i></button><div class="flex items-center gap-4"><div class="text-right hidden sm:block"><div class="text-white text-sm font-semibold" id="userName">Loading...</div><div class="text-green-400 text-xs">Balance: ₱<span id="userBalance">0</span></div></div><div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center"><i class="bi bi-person text-white"></i></div></div></div>
+
+        <div class="glass-card p-6 mb-6"><h1 class="text-2xl md:text-3xl font-bold text-white mb-2">🔑 My Keys & Licenses</h1><p class="text-gray-400">Access your purchased product keys and licenses</p></div>
+
+        <div class="glass-card p-6"><div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-white">Your Active Keys</h2><div class="flex gap-2"><input type="text" id="searchInput" placeholder="Search keys..." class="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-white text-sm"></div></div><div id="keysList" class="space-y-3"><p class="text-gray-400 text-center py-8">No keys found. Purchase products to get keys.</p></div></div>
+    </main>
+
+    <div id="keyModal" class="modal"><div class="modal-content glass-card p-6"><div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-white">Product Key</h2><button onclick="closeModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button></div><div class="text-center"><p class="text-gray-400 mb-2">Your license key for</p><p class="text-white font-bold text-lg" id="modalProductName"></p><div class="my-4 p-3 bg-black/30 rounded-xl"><code id="modalKey" class="text-purple-400 text-lg break-all"></code></div><button onclick="copyKey()" class="btn-primary px-6 py-2 rounded-xl text-white"><i class="bi bi-clipboard"></i> Copy Key</button></div></div></div>
+
+    <script>
+        let currentUser = null, keys = [], isMusicPlaying = false;
+        document.addEventListener('DOMContentLoaded', () => {
+            const userData = localStorage.getItem('cluddy_current_user');
+            if (!userData) { window.location.href = 'login.html'; return; }
+            currentUser = JSON.parse(userData);
+            document.getElementById('userName').textContent = currentUser.fullname || currentUser.username;
+            document.getElementById('userBalance').textContent = currentUser.balance || 0;
+            loadKeys();
+            loadMusic();
+        });
+        function loadMusic() { const musicUrl = localStorage.getItem('cluddy_music_url'); if (musicUrl) { document.getElementById('musicSource').src = musicUrl; document.getElementById('bgMusic').load(); } }
+        function toggleMusic() { const music = document.getElementById('bgMusic'); const icon = document.getElementById('musicIcon'); const text = document.getElementById('musicText'); const musicUrl = localStorage.getItem('cluddy_music_url'); if (isMusicPlaying) { music.pause(); icon.className = 'bi bi-music-note'; text.textContent = 'Play Music'; icon.style.animation = 'none'; } else { if (musicUrl) { music.play().catch(e => console.log('Playback failed:', e)); icon.className = 'bi bi-music-note-beamed music-playing'; text.textContent = 'Playing...'; } } isMusicPlaying = !isMusicPlaying; }
+        function loadKeys() { const orders = JSON.parse(localStorage.getItem('cluddy_orders')) || []; const approvedOrders = orders.filter(o => o.userId === currentUser.id && o.status === 'approved'); keys = approvedOrders.map(order => ({ id: order.orderId, productName: order.productName, key: generateKey(order.orderId, order.productName), date: order.timestamp })); displayKeys(keys); }
+        function generateKey(orderId, productName) { const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; let key = ''; for (let i = 0; i < 4; i++) { for (let j = 0; j < 5; j++) { key += chars.charAt(Math.floor(Math.random() * chars.length)); } if (i < 3) key += '-'; } return key; }
+        function displayKeys(keysToShow) { const container = document.getElementById('keysList'); const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || ''; const filtered = keysToShow.filter(k => k.productName.toLowerCase().includes(searchTerm) || k.key.toLowerCase().includes(searchTerm)); if (filtered.length === 0) { container.innerHTML = '<p class="text-gray-400 text-center py-8">No keys found.</p>'; return; } container.innerHTML = filtered.map(key => `<div class="flex justify-between items-center p-4 rounded-xl bg-white/5"><div><p class="text-white font-semibold">${key.productName}</p><p class="text-gray-400 text-xs">Purchased: ${new Date(key.date).toLocaleDateString()}</p></div><div class="flex gap-3"><code class="text-purple-400 text-sm bg-black/30 px-3 py-1 rounded-lg">${key.key.substring(0, 15)}...</code><button onclick="viewKey('${key.id}')" class="text-blue-400 hover:text-blue-300"><i class="bi bi-eye"></i></button></div></div>`).join(''); }
+        function viewKey(keyId) { const key = keys.find(k => k.id === keyId); if (key) { document.getElementById('modalProductName').textContent = key.productName; document.getElementById('modalKey').textContent = key.key; document.getElementById('keyModal').style.display = 'flex'; } }
+        function copyKey() { const keyText = document.getElementById('modalKey').textContent; navigator.clipboard.writeText(keyText); showNotification('Key copied to clipboard!', 'success'); }
+        function closeModal() { document.getElementById('keyModal').style.display = 'none'; }
+        document.getElementById('searchInput')?.addEventListener('keyup', () => loadKeys());
+        function showNotification(msg, type) { const notification = document.createElement('div'); notification.className = `fixed top-4 right-4 px-4 py-3 rounded-xl shadow-lg z-50 transition-all ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`; notification.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : 'x-circle'} mr-2"></i>${msg}`; document.body.appendChild(notification); setTimeout(() => notification.remove(), 3000); }
+        function logout() { localStorage.removeItem('cluddy_current_user'); window.location.href = 'login.html'; }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('active'); }
+        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('active'); }
+    </script>
+</body>
+</html>
