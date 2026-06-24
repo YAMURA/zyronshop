@@ -258,7 +258,7 @@
     <div id="splashScreen" class="splash-screen">
         <div class="text-center">
             <div class="splash-logo mx-auto"><i class="bi bi-shop text-white text-4xl"></i></div>
-            <div class="text-white mt-4 text-sm font-semibold tracking-wider">CLUDDY SHOP</div>
+            <div class="text-white mt-4 text-sm font-semibold tracking-wider">zyron SHOP</div>
             <div class="mt-3 w-32 h-1 bg-white/10 rounded-full overflow-hidden mx-auto">
                 <div class="h-full w-1/2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full animate-pulse"></div>
             </div>
@@ -497,7 +497,7 @@
                         <a href="https://t.me/codmstocksnisato" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-500/20 border border-green-500/30 text-green-400 hover:bg-green-500/30 transition">
                             <i class="bi bi-shield-check text-xl"></i> <span>Proof Channel</span>
                         </a>
-                        <a href="https://t.me/xmoddercluddy" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/30 transition">
+                        <a href="https://t.me/xmodderzyron" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/30 transition">
                             <i class="bi bi-chat-dots text-xl"></i> <span>Feedback Channel</span>
                         </a>
                     </div>
@@ -569,7 +569,7 @@
 
     <script>
         let isMusicPlaying = false;
-        let musicFile = localStorage.getItem('cluddy_music_url');
+        let musicFile = localStorage.getItem('zyron_music_url');
         
         function loadMusic() {
             if (musicFile) {
@@ -613,7 +613,7 @@
         });
 
         function loadProducts() {
-            let products = JSON.parse(localStorage.getItem('cluddy_products'));
+            let products = JSON.parse(localStorage.getItem('zyron_products'));
             const grid = document.getElementById('productsGrid');
             
             if (!products || products.length === 0) {
@@ -670,7 +670,7 @@
         }
 
         function loadAnnouncements() {
-            const announcements = JSON.parse(localStorage.getItem('cluddy_announcements')) || [];
+            const announcements = JSON.parse(localStorage.getItem('zyron_announcements')) || [];
             const announcementText = document.getElementById('announcementText');
             if (announcements.length > 0) {
                 let index = 0;
